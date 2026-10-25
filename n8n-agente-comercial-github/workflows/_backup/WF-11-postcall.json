@@ -1,0 +1,465 @@
+{
+  "name": "WF-11 · Post-llamada (Sheets + avisos)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "vapi-events",
+        "responseMode": "responseNode",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "id": "wh-11",
+      "name": "Vapi Eventos",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -660,
+        0
+      ],
+      "webhookId": "vapi-events"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "ok",
+        "options": {}
+      },
+      "id": "resp-11",
+      "name": "Responder 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "gas_url",
+              "value": "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "gas_secret",
+              "value": "YOUR_SHARED_SECRET",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "telegram_chat_id",
+              "value": "YOUR_TELEGRAM_CHAT_ID",
+              "type": "string"
+            },
+            {
+              "id": "c4",
+              "name": "evolution_base_url",
+              "value": "https://wa.tudominio.com",
+              "type": "string"
+            },
+            {
+              "id": "c5",
+              "name": "evolution_instance",
+              "value": "agencia",
+              "type": "string"
+            },
+            {
+              "id": "c6",
+              "name": "max_intentos",
+              "value": 3,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "cfg-11",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{ $('Vapi Eventos').first().json.body?.message?.type ?? $json.body?.message?.type ?? $json.message?.type ?? $json.type }}",
+                    "rightValue": "end-of-call-report",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fin_llamada"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{ $('Vapi Eventos').first().json.body?.message?.type ?? $json.body?.message?.type ?? $json.message?.type ?? $json.type }}",
+                    "rightValue": "status-update",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "estado"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "id": "sw-11",
+      "name": "Tipo evento",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src = $('Vapi Eventos').first().json;\nconst m = src.body?.message ?? src.body ?? src.message ?? src;\nconst call = m.call ?? {};\nconst art = m.artifact ?? {};\nconst an = m.analysis ?? {};\nconst sd = an.structuredData ?? {};\nconst md = call.metadata ?? {};\n\nconst started = call.startedAt ?? m.startedAt ?? '';\nconst ended = call.endedAt ?? m.endedAt ?? '';\nconst dur = m.durationSeconds ?? (started && ended ? Math.round((new Date(ended) - new Date(started)) / 1000) : 0);\n\nreturn [{ json: {\n  call_id: String(call.id ?? m.callId ?? ''),\n  lead_id: String(md.lead_id ?? ''),\n  campana: String(md.campana ?? ''),\n  telefono: String(call.customer?.number ?? md.telefono ?? ''),\n  intentos: Number(md.intentos ?? 0),\n  ended_reason: String(m.endedReason ?? call.endedReason ?? ''),\n  duracion_seg: dur,\n  inicio: started,\n  fin: ended,\n  resumen: an.summary ?? '',\n  transcript: art.transcript ?? m.transcript ?? '',\n  grabacion_url: art.recordingUrl ?? m.recordingUrl ?? '',\n  nombre: sd.nombre ?? md.nombre ?? '',\n  empresa: sd.empresa ?? md.empresa ?? '',\n  sector: sd.sector ?? '',\n  tamano: sd.tamano ?? '',\n  problema: sd.problema ?? '',\n  procesos_manuales: sd.procesos_manuales ?? '',\n  quiere_automatizar: sd.quiere_automatizar ?? '',\n  urgencia: sd.urgencia ?? '',\n  decisor: sd.decisor,\n  interes: sd.interes ?? '',\n  score: sd.score,\n  objecion: sd.objecion ?? '',\n  resultado: sd.resultado ?? '',\n  fecha_cita: sd.fecha_cita ?? '',\n  email: sd.email ?? '',\n  proximo_paso: sd.proximo_paso ?? ''\n} }];"
+      },
+      "id": "extract-11",
+      "name": "Extraer report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const cfg = $('Config').first().json;\nconst j = $json;\nconst intentos = Number(j.intentos || 0);\nconst ended = String(j.ended_reason || '');\n\nlet resultado = String(j.resultado || '').toLowerCase();\nif (!resultado) {\n  resultado = ['customer-did-not-answer', 'customer-busy', 'voicemail', 'silence-timeout'].includes(ended)\n    ? 'sin_contacto'\n    : 'contactado';\n}\n\nconst plus = h => new Date(Date.now() + h * 3600e3).toISOString();\nlet estado = 'contactado';\nlet next = '';\n\nswitch (resultado) {\n  case 'cita': estado = 'cita_agendada'; break;\n  case 'humano': estado = 'humano'; break;\n  case 'no_interesado': estado = 'no_interesado'; break;\n  case 'callback': estado = 'reintentar'; next = plus(24); break;\n  case 'info': estado = 'contactado'; next = plus(48); break;\n  case 'sin_contacto':\n    if (ended === 'voicemail') { estado = 'reintentar'; next = plus(24); }\n    else if (intentos >= Number(cfg.max_intentos || 3)) { estado = 'nurture'; next = plus(24 * 90); }\n    else { estado = 'reintentar'; next = plus(ended === 'customer-busy' ? 0.5 : 2); }\n    break;\n  default: estado = 'contactado'; break;\n}\n\nlet score = Number(j.score || 0);\nif (!score) {\n  score += j.interes === 'alto' ? 40 : j.interes === 'medio' ? 25 : 10;\n  score += j.urgencia === 'alta' ? 20 : j.urgencia === 'media' ? 10 : 0;\n  score += j.decisor === true ? 15 : 0;\n  score += j.problema ? 10 : 0;\n  score += j.empresa ? 10 : 0;\n  score = Math.max(0, Math.min(100, score));\n}\n\nconst row = {\n  id: j.lead_id,\n  lead_id: j.lead_id,\n  estado,\n  resultado,\n  score,\n  call_id: j.call_id,\n  ended_reason: ended,\n  duracion_seg: j.duracion_seg,\n  conversacion_id: j.call_id,\n  canal: 'voz',\n  inicio: j.inicio,\n  fin: j.fin,\n  resumen: j.resumen,\n  transcripcion_ref: j.grabacion_url\n};\n\nfor (const k of ['nombre', 'empresa', 'sector', 'tamano', 'telefono', 'email', 'problema', 'procesos_manuales', 'quiere_automatizar', 'urgencia', 'interes', 'objecion', 'proximo_paso', 'fecha_cita', 'grabacion_url']) {\n  if (j[k] !== undefined && j[k] !== null && j[k] !== '') row[k] = j[k];\n}\nif (j.decisor === true) row.decisor = 'si';\nif (j.decisor === false) row.decisor = 'no';\nif (next) row.fecha_proximo_intento = next;\nif (resultado === 'cita') row.cita_id = 'CIT-' + j.call_id;\n\nreturn [{ json: { ...row, _tg_resultado: resultado, _tg_score: score } }];"
+      },
+      "id": "classify-11",
+      "name": "Clasificar y programar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.gas_url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'sheets.appendOrUpdate', secret: $('Config').first().json.gas_secret, sheet: 'Leads', row: $json, matchingColumns: ['id'] }) }}",
+        "options": {}
+      },
+      "id": "leads-11",
+      "name": "Actualizar lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.gas_url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'sheets.appendOrUpdate', secret: $('Config').first().json.gas_secret, sheet: 'Conversaciones', row: $('Clasificar y programar').item.json, matchingColumns: ['conversacion_id'] }) }}",
+        "options": {}
+      },
+      "id": "conv-11",
+      "name": "Guardar conversacion",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.telegram_chat_id }}",
+        "text": "={{ 'LLAMADA FINALIZADA\\nResultado: ' + $('Clasificar y programar').item.json._tg_resultado + ' · Score ' + $('Clasificar y programar').item.json._tg_score + '\\n' + ($('Extraer report').item.json.nombre || 'Sin nombre') + ' · ' + ($('Extraer report').item.json.empresa || 'Sin empresa') + '\\nMotivo: ' + ($('Extraer report').item.json.problema || 'no detectado') + '\\nObjecion: ' + ($('Extraer report').item.json.objecion || 'ninguna') + '\\nDuracion: ' + $('Extraer report').item.json.duracion_seg + ' s\\nCita: ' + ($('Extraer report').item.json.fecha_cita || 'no agendada') }}",
+        "additionalFields": {}
+      },
+      "id": "tg-11",
+      "name": "Avisar resultado",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        -160
+      ],
+      "disabled": false,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "telegramApi": {
+          "id": "f4OWjpVUu0awzSQ9",
+          "name": "Telegram Julian Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.evolution_base_url + '/message/sendText/' + $('Config').first().json.evolution_instance }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ number: $('Extraer report').item.json.telefono, text: ($('Clasificar y programar').item.json._tg_resultado === 'cita' ? 'Hola ' + ($('Extraer report').item.json.nombre || '') + ', soy el asistente de la agencia. Tu reunion queda confirmada' + ($('Extraer report').item.json.fecha_cita ? ' para el ' + $('Extraer report').item.json.fecha_cita : '') + '. Te llega la invitacion por email.' : 'Hola ' + ($('Extraer report').item.json.nombre || '') + ', soy el asistente de la agencia. Gracias por hablar con nosotros; si quieres, te propongo un hueco para una reunion de 30 minutos.') }) }}",
+        "options": {}
+      },
+      "id": "wa-11",
+      "name": "Confirmar WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1340,
+        -160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "noop-11",
+      "name": "Sin accion",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        120
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "err-11",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ 'ERROR en WF-11 (Post-llamada)\\nNodo: ' + $json.execution?.lastNodeExecuted + '\\nError: ' + ($json.execution?.error?.message || 'ver ejecucion') }}",
+        "additionalFields": {}
+      },
+      "id": "err-tg-11",
+      "name": "Avisar error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        320
+      ],
+      "disabled": false,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "telegramApi": {
+          "id": "f4OWjpVUu0awzSQ9",
+          "name": "Telegram Julian Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.gas_url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'ping', secret: $('Config').first().json.gas_secret }) }}",
+        "options": {}
+      },
+      "id": "warmup-gas-01",
+      "name": "Despertar Apps Script",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        460
+      ]
+    }
+  ],
+  "connections": {
+    "Vapi Eventos": {
+      "main": [
+        [
+          {
+            "node": "Responder 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder 200": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Tipo evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo evento": {
+      "main": [
+        [
+          {
+            "node": "Extraer report",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Despertar Apps Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer report": {
+      "main": [
+        [
+          {
+            "node": "Clasificar y programar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificar y programar": {
+      "main": [
+        [
+          {
+            "node": "Actualizar lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar lead": {
+      "main": [
+        [
+          {
+            "node": "Guardar conversacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar conversacion": {
+      "main": [
+        [
+          {
+            "node": "Avisar resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar resultado": {
+      "main": [
+        [
+          {
+            "node": "Confirmar WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Avisar error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Despertar Apps Script": {
+      "main": [
+        [
+          {
+            "node": "Sin accion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,371 @@
+{
+    "id":  "398f30d5-1c4b-4e7c-b327-b75c1a063dc5",
+    "orgId":  "ea05048f-dab7-4221-b871-7afdbccaae6d",
+    "name":  "Comercial Inbound · Rose Holding IA",
+    "createdAt":  "2026-10-25T02:42:56.165Z",
+    "updatedAt":  "2026-10-25T03:24:42.184Z",
+    "model":  {
+                  "model":  "gpt-4o",
+                  "tools":  [
+                                {
+                                    "type":  "function",
+                                    "async":  false,
+                                    "server":  {
+                                                   "url":  "https://YOUR_N8N_HOST/webhook/vapi-tools",
+                                                   "headers":  {
+                                                                   "x-vapi-secret":  "YOUR_VAPI_SECRET"
+                                                               },
+                                                   "timeoutSeconds":  30
+                                               },
+                                    "function":  {
+                                                     "name":  "consultar_disponibilidad",
+                                                     "parameters":  {
+                                                                        "type":  "object",
+                                                                        "required":  [
+
+                                                                                     ],
+                                                                        "properties":  {
+                                                                                           "desde":  {
+                                                                                                         "type":  "string",
+                                                                                                         "description":  "ISO 8601 opcional. Por defecto ahora."
+                                                                                                     },
+                                                                                           "hasta":  {
+                                                                                                         "type":  "string",
+                                                                                                         "description":  "ISO 8601 opcional. Por defecto +14 dias."
+                                                                                                     }
+                                                                                       }
+                                                                    },
+                                                     "description":  "Consulta los huecos reales del calendario del comercial para los proximos 14 dias. Usala solo cuando el prospecto haya aceptado una reunion."
+                                                 },
+                                    "messages":  [
+                                                     {
+                                                         "type":  "request-start",
+                                                         "content":  "Déjame ver la agenda."
+                                                     }
+                                                 ]
+                                },
+                                {
+                                    "type":  "function",
+                                    "async":  false,
+                                    "server":  {
+                                                   "url":  "https://YOUR_N8N_HOST/webhook/vapi-tools",
+                                                   "headers":  {
+                                                                   "x-vapi-secret":  "YOUR_VAPI_SECRET"
+                                                               },
+                                                   "timeoutSeconds":  30
+                                               },
+                                    "function":  {
+                                                     "name":  "crear_cita",
+                                                     "parameters":  {
+                                                                        "type":  "object",
+                                                                        "required":  [
+                                                                                         "nombre",
+                                                                                         "empresa",
+                                                                                         "rubro",
+                                                                                         "motivo",
+                                                                                         "procesos",
+                                                                                         "inicio"
+                                                                                     ],
+                                                                        "properties":  {
+                                                                                           "rubro":  {
+                                                                                                         "type":  "string",
+                                                                                                         "description":  "Rubro: a que se dedica la empresa."
+                                                                                                     },
+                                                                                           "inicio":  {
+                                                                                                          "type":  "string",
+                                                                                                          "description":  "Copia literal el ISO entre corchetes que devolvio consultar_disponibilidad, p. ej. 2026-11-03T10:00:00.000+01:00. No lo recalcules."
+                                                                                                      },
+                                                                                           "motivo":  {
+                                                                                                          "type":  "string",
+                                                                                                          "description":  "El problema o dolor principal, en una frase."
+                                                                                                      },
+                                                                                           "nombre":  {
+                                                                                                          "type":  "string",
+                                                                                                          "description":  "Nombre y apellido de la persona."
+                                                                                                      },
+                                                                                           "empresa":  {
+                                                                                                           "type":  "string",
+                                                                                                           "description":  "Nombre de la empresa."
+                                                                                                       },
+                                                                                           "procesos":  {
+                                                                                                            "type":  "string",
+                                                                                                            "description":  "Que procesos concretos quieren automatizar."
+                                                                                                        }
+                                                                                       }
+                                                                    },
+                                                     "description":  "Crea la reunion en el calendario. Solo si ya tienes nombre y apellido, empresa, rubro, problema y procesos, y el prospecto confirmo dia y hora. No pidas el email en la llamada."
+                                                 },
+                                    "messages":  [
+                                                     {
+                                                         "type":  "request-start",
+                                                         "content":  "Perfecto, te lo reservo ahora mismo."
+                                                     }
+                                                 ]
+                                },
+                                {
+                                    "type":  "function",
+                                    "async":  true,
+                                    "server":  {
+                                                   "url":  "https://YOUR_N8N_HOST/webhook/vapi-tools",
+                                                   "headers":  {
+                                                                   "x-vapi-secret":  "YOUR_VAPI_SECRET"
+                                                               },
+                                                   "timeoutSeconds":  30
+                                               },
+                                    "function":  {
+                                                     "name":  "guardar_datos",
+                                                     "parameters":  {
+                                                                        "type":  "object",
+                                                                        "required":  [
+
+                                                                                     ],
+                                                                        "properties":  {
+                                                                                           "nombre":  {
+                                                                                                          "type":  "string",
+                                                                                                          "description":  "Nombre y apellido, si lo sabes."
+                                                                                                      },
+                                                                                           "sector":  {
+                                                                                                          "type":  "string",
+                                                                                                          "description":  "Rubro o a que se dedica la empresa."
+                                                                                                      },
+                                                                                           "tamano":  {
+                                                                                                          "type":  "string",
+                                                                                                          "description":  "Numero aproximado de empleados."
+                                                                                                      },
+                                                                                           "decisor":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                                           "empresa":  {
+                                                                                                           "type":  "string"
+                                                                                                       },
+                                                                                           "problema":  {
+                                                                                                            "type":  "string"
+                                                                                                        },
+                                                                                           "urgencia":  {
+                                                                                                            "enum":  [
+                                                                                                                         "alta",
+                                                                                                                         "media",
+                                                                                                                         "baja",
+                                                                                                                         "desconocida"
+                                                                                                                     ],
+                                                                                                            "type":  "string"
+                                                                                                        },
+                                                                                           "procesos_manuales":  {
+                                                                                                                     "type":  "string"
+                                                                                                                 },
+                                                                                           "quiere_automatizar":  {
+                                                                                                                      "type":  "string"
+                                                                                                                  }
+                                                                                       }
+                                                                    },
+                                                     "description":  "Guarda en el CRM cualquier dato nuevo que el prospecto cuente. Se ejecuta en segundo plano: no interrumpas la conversacion ni anuncies que estas guardando."
+                                                 }
+                                },
+                                {
+                                    "type":  "function",
+                                    "async":  false,
+                                    "server":  {
+                                                   "url":  "https://YOUR_N8N_HOST/webhook/vapi-tools",
+                                                   "headers":  {
+                                                                   "x-vapi-secret":  "YOUR_VAPI_SECRET"
+                                                               },
+                                                   "timeoutSeconds":  30
+                                               },
+                                    "function":  {
+                                                     "name":  "escalar_humano",
+                                                     "parameters":  {
+                                                                        "type":  "object",
+                                                                        "required":  [
+                                                                                         "motivo"
+                                                                                     ],
+                                                                        "properties":  {
+                                                                                           "motivo":  {
+                                                                                                          "type":  "string"
+                                                                                                      }
+                                                                                       }
+                                                                    },
+                                                     "description":  "Transfiere la llamada a una persona del equipo cuando el prospecto lo pide, hay enfado o el caso queda fuera del alcance del agente."
+                                                 },
+                                    "messages":  [
+                                                     {
+                                                         "type":  "request-start",
+                                                         "content":  "Te paso con un compañero del equipo."
+                                                     }
+                                                 ]
+                                }
+                            ],
+                  "messages":  [
+                                   {
+                                       "role":  "system",
+                                       "content":  "# ROL\nEres Julian, comercial de Rose Holding IA, agencia de IA y automatización para empresas.\nAtiendes llamadas entrantes: la persona ha llamado a Rose Holding IA y tú descolgas.\nNunca digas que la llamas tú, ni que pidió información antes, ni que es una campaña.\nHoy es {{ \"now\" | date: \"%d/%m/%Y\" }}.\n\n# MISIÓN\nEntender para qué llama y, si encaja, conseguir una reunión de 30 minutos con un especialista.\nNo vendes el proyecto: vendes el diagnóstico.\nEl éxito es una cita agendada con datos completos, no una explicación larga.\n\n# HORARIO DE LAS REUNIONES\n- Días: de lunes a sábado.\n- Mañana: de 9:00 a 11:00 (hora de Madrid).\n- Tarde: de 14:00 a 17:00 (hora de Madrid).\n- Esto indica cuándo se puede reunir el especialista, pero NO es una lista de horas que\n  puedas ofrecer. Solo puedes decir una hora concreta si aparece en lo que te devuelva\n  consultar_disponibilidad. Estar dentro del horario no significa estar libre.\n\n# CÓMO HABLAS\n- Español de España, tuteo, natural y directo. Frases de máximo 20 palabras.\n- Habla SIEMPRE en español. PROHIBIDO decir palabras o números en inglés.\n  Di \"ocho\" (no \"eight\"), \"enlace\" (no \"link\"), \"reunión\" (no \"meeting\"),\n  \"correo\" (no \"email\"), \"vale\" (no \"ok\"), \"equipo\" (no \"team\").\n- UNA pregunta por turno. Nunca dos seguidas.\n- Antes de preguntar, reacciona a lo que acaba de decir.\n- Sin jerga: di \"automatizar\", no \"orquestar flujos\".\n- No repitas su nombre en cada frase. No digas \"perfecto\" más de una vez.\n- Si te interrumpen, cállate y escucha.\n- Máximo 4 minutos antes de proponer la reunión.\n- NUNCA digas \"espera\", \"un segundo\", \"un momento\" ni \"déjame\". La herramienta de agenda\n  ya avisa por ti cuando consultas huecos: no lo anuncies tú.\n  Guardar datos va en segundo plano: no lo anuncies, sigue hablando con normalidad.\n- NUNCA pidas el email ni dictes direcciones de correo: por teléfono no se entienden.\n  El correo se le pide por WhatsApp después de la llamada, para que lo escriba él.\n- Tampoco pidas el teléfono: en una llamada entrante ya lo tienes.\n- No prometas el enlace de la videollamada por WhatsApp ni por correo. Si pregunta por el\n  enlace o la invitación, di: \"un compañero del equipo te la manda antes de la reunión\".\n  Lo único que sí puedes anunciar es que después le escribirás por WhatsApp para pedirle\n  el correo y mandarle la información.\n- PROHIBIDO nombrar un día u hora antes de que consultar_disponibilidad te los devuelva.\n  No los supongas, no los inventes ni los recuerdes de otra llamada. Si aún no lo has hecho,\n  llama a la herramienta sin anunciarlo. Si ofreces una hora que\n  luego no existe, tienes que contradecirte y el cliente pierde la confianza.\n  Tampoco ofrezcas una hora solo porque esté dentro del horario de atención: tiene que\n  venir en la respuesta de consultar_disponibilidad.\n\n# DATOS OBLIGATORIOS ANTES DE RESERVAR\nNo puedes llamar a crear_cita hasta tener los CINCO datos. Si falta alguno, pídelo antes\nde proponer hora, de uno en uno y sin interrogar:\n1. Nombre y apellido.\n2. Nombre de la empresa.\n3. Rubro: a qué se dedica la empresa.\n4. Problema: qué les duele o qué quieren resolver.\n5. Procesos: qué procesos concretos quieren automatizar.\nEl correo NO se pide en la llamada: se le pide por WhatsApp después.\n\n# DATOS COMPLEMENTARIOS (útiles, no bloquean)\ntamaño, urgencia, quién decide, disponibilidad.\nNo sabes nada de quien llama: no des por hecho su nombre, empresa ni motivo.\nSi llama alguien que ya tiene cita, no la dupliques: confírmala o pásalo a un compañero.\n\n# SECUENCIA (flexible, nunca rígida)\n1. Apertura 10 s: saluda, di quién eres y pregunta en qué puedes ayudarle.\n   No pidas permiso para hablar: te ha llamado él a ti.\n2. Descubrimiento: para qué llama, cómo trabajan hoy, dónde se les va el tiempo, qué duele más.\n3. Impacto: cuantifica (\"¿cuántas horas a la semana?\", \"¿cuántos leads se pierden?\").\n4. Visión: en 2 frases, cómo se resolvería, con un caso parecido de su sector.\n5. Cierre: antes de proponer hora, comprueba que tienes los cinco datos obligatorios.\n   Si falta alguno, pídelo ahora, de uno en uno.\n   Después di \"Por lo que me cuentas, tiene sentido que un especialista vea vuestro caso\"\n   y, JUSTO después, llama a consultar_disponibilidad. Solo entonces ofrece 2-3 huecos\n   de los que te haya devuelto la herramienta.\n6. Confirmación: repite día y hora, llama a crear_cita y, si te confirma, dilo tal cual.\n   No anuncies que le acabas de mandar nada. Si pregunta por el enlace o la invitación:\n   \"un compañero del equipo te la manda antes de la reunión\".\n   Si quieres cerrar del todo: \"después te escribimos por WhatsApp para pedirte el correo\".\n\n# OBJECIONES\n- \"Ya tenemos proveedor\": no sustituyes, complementas. Pregunta qué parte mejorarían.\n- \"Es caro\": lleva al coste de no hacerlo. Nunca des precios.\n- \"No es el momento\": propón retomarlo en una fecha concreta.\n- \"Mándame info\": acepta, pide 2 datos para no enviar algo genérico y propón hora.\n- \"La IA no funciona en mi sector\": reconoce el escepticismo, da un caso real y ofrece verlo con datos.\n- \"¿Eres un robot?\": \"Sí, soy el asistente de Rose Holding IA. Si prefieres, te paso con una persona\n  del equipo.\" Nunca lo niegues.\n- \"No me interesa\": cierra en 5 segundos con educación. No insistas.\n- \"Solo llamaba a preguntar X\": responde a X en una frase y ofrece la reunión.\n\n# HERRAMIENTAS\n- consultar_disponibilidad: llámala SIEMPRE antes de proponer una hora. Nunca inventes ni\n  supongas huecos ni digas horas de memoria. Ofrece 2-3 huecos de los que te devuelva.\n  Si el cliente propone un día u hora, vuelve a llamarla poniendo ese día en \"desde\" y\n  \"hasta\" y comprueba de verdad. Solo si esa hora no aparece en lo que te devuelve,\n  dile que la tienes ocupada.\n- crear_cita: solo si tienes los cinco datos obligatorios y el hueco confirmado.\n  Rellena nombre (con apellido), empresa, rubro, motivo (el problema) y procesos.\n  Si falla, disculpa y ofrece otro.\n  El campo \"inicio\" es obligatorio copiarlo TAL CUAL del texto que devolvió\n  consultar_disponibilidad, incluido el valor entre corchetes. No lo traduzcas ni lo\n  recalcules: si el hueco era el martes a las 10:00, copia esa cadena exacta.\n- escalar_humano: si lo piden, hay enfado o es un caso fuera de tu alcance.\n- guardar_datos: cada vez que obtengas un dato nuevo relevante. Se ejecuta en segundo\n  plano, así que NO anuncies que estás guardando ni pidas paciencia. El rubro va en\n  \"sector\".\n\n# LÍMITES\n- No inventes precios, plazos, clientes ni resultados. Si no lo sabes:\n  \"eso te lo concreta el especialista\".\n- No prometas cifras de ahorro. No hables mal de la competencia.\n- No pidas datos sensibles (IBAN, DNI).\n- Si es un particular, cierra con educación.\n- Si tras 2 intentos no avanza, propón la reunión y cierra.\n\nRECUERDA SIEMPRE: hablas en español de España. Ninguna palabra ni número en inglés.\nLas horas que ofreces salen siempre de consultar_disponibilidad, nunca de tu memoria.\nNunca pidas el email ni el teléfono, ni siquiera para \"guardar los datos\": ya los tenemos.\n"
+                                   }
+                               ],
+                  "provider":  "openai",
+                  "maxTokens":  220,
+                  "temperature":  0.2
+              },
+    "firstMessage":  "Hola, soy Julian, de Rose Holding IA. ¿En qué puedo ayudarte?",
+    "transcriber":  {
+                        "model":  "nova-3",
+                        "language":  "es",
+                        "provider":  "deepgram",
+                        "endpointing":  350,
+                        "smartFormat":  true,
+                        "fallbackPlan":  {
+                                             "autoFallback":  {
+                                                                  "enabled":  true
+                                                              }
+                                         }
+                    },
+    "silenceTimeoutSeconds":  20,
+    "responseDelaySeconds":  0.4,
+    "endCallPhrases":  [
+                           "adiós",
+                           "hasta luego",
+                           "que tengas un buen día"
+                       ],
+    "llmRequestDelaySeconds":  0.1,
+    "maxDurationSeconds":  600,
+    "backgroundSound":  "off",
+    "backchannelingEnabled":  true,
+    "firstMessageMode":  "assistant-speaks-first",
+    "analysisPlan":  {
+                         "summaryPlan":  {
+                                             "enabled":  true
+                                         },
+                         "structuredDataPlan":  {
+                                                    "enabled":  true,
+                                                    "schema":  {
+                                                                   "type":  "object",
+                                                                   "required":  [
+                                                                                    "resultado",
+                                                                                    "interes",
+                                                                                    "score"
+                                                                                ],
+                                                                   "properties":  {
+                                                                                      "email":  {
+                                                                                                    "type":  "string"
+                                                                                                },
+                                                                                      "rubro":  {
+                                                                                                    "description":  "Rubro o actividad de la empresa, tal como lo dijo el cliente.",
+                                                                                                    "type":  "string"
+                                                                                                },
+                                                                                      "score":  {
+                                                                                                    "description":  "0-100 segun encaje, dolor, urgencia y autoridad",
+                                                                                                    "type":  "number"
+                                                                                                },
+                                                                                      "nombre":  {
+                                                                                                     "description":  "Nombre y apellido.",
+                                                                                                     "type":  "string"
+                                                                                                 },
+                                                                                      "sector":  {
+                                                                                                     "description":  "Rubro o a que se dedica la empresa.",
+                                                                                                     "type":  "string"
+                                                                                                 },
+                                                                                      "tamano":  {
+                                                                                                     "type":  "string"
+                                                                                                 },
+                                                                                      "decisor":  {
+                                                                                                      "type":  "boolean"
+                                                                                                  },
+                                                                                      "empresa":  {
+                                                                                                      "type":  "string"
+                                                                                                  },
+                                                                                      "interes":  {
+                                                                                                      "type":  "string",
+                                                                                                      "enum":  [
+                                                                                                                   "alto",
+                                                                                                                   "medio",
+                                                                                                                   "bajo"
+                                                                                                               ]
+                                                                                                  },
+                                                                                      "objecion":  {
+                                                                                                       "type":  "string"
+                                                                                                   },
+                                                                                      "problema":  {
+                                                                                                       "type":  "string"
+                                                                                                   },
+                                                                                      "urgencia":  {
+                                                                                                       "type":  "string",
+                                                                                                       "enum":  [
+                                                                                                                    "alta",
+                                                                                                                    "media",
+                                                                                                                    "baja",
+                                                                                                                    "desconocida"
+                                                                                                                ]
+                                                                                                   },
+                                                                                      "resultado":  {
+                                                                                                        "type":  "string",
+                                                                                                        "enum":  [
+                                                                                                                     "cita",
+                                                                                                                     "callback",
+                                                                                                                     "info",
+                                                                                                                     "no_interesado",
+                                                                                                                     "humano",
+                                                                                                                     "sin_contacto"
+                                                                                                                 ]
+                                                                                                    },
+                                                                                      "fecha_cita":  {
+                                                                                                         "description":  "ISO 8601 si se agendo",
+                                                                                                         "type":  "string"
+                                                                                                     },
+                                                                                      "proximo_paso":  {
+                                                                                                           "type":  "string"
+                                                                                                       },
+                                                                                      "procesos_manuales":  {
+                                                                                                                "description":  "Procesos concretos que quieren automatizar.",
+                                                                                                                "type":  "string"
+                                                                                                            },
+                                                                                      "quiere_automatizar":  {
+                                                                                                                 "type":  "string"
+                                                                                                             }
+                                                                                  }
+                                                               }
+                                                },
+                         "successEvaluationPlan":  {
+                                                       "enabled":  false
+                                                   }
+                     },
+    "artifactPlan":  {
+                         "transcriptPlan":  {
+                                                "enabled":  true,
+                                                "assistantName":  "Asistente"
+                                            },
+                         "recordingEnabled":  true
+                     },
+    "startSpeakingPlan":  {
+                              "waitSeconds":  0.6,
+                              "smartEndpointingEnabled":  true
+                          },
+    "stopSpeakingPlan":  {
+                             "numWords":  2,
+                             "voiceSeconds":  0.2,
+                             "backoffSeconds":  1,
+                             "acknowledgementPhrases":  [
+                                                            "vale",
+                                                            "ajá",
+                                                            "aja",
+                                                            "mmm",
+                                                            "sí",
+                                                            "ya",
+                                                            "claro",
+                                                            "entiendo"
+                                                        ],
+                             "interruptionPhrases":  [
+                                                         "para",
+                                                         "espera",
+                                                         "un momento",
+                                                         "oye"
+                                                     ]
+                         },
+    "server":  {
+                   "url":  "https://YOUR_N8N_HOST/webhook/vapi-events",
+                   "timeoutSeconds":  20,
+                   "headers":  {
+                                   "x-vapi-secret":  "YOUR_VAPI_SECRET"
+                               }
+               },
+    "firstMessageInterruptionsEnabled":  true,
+    "latestVersion":  "v5",
+    "isServerUrlSecretSet":  false
+}

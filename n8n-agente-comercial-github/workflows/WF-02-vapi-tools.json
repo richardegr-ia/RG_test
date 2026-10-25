@@ -1,0 +1,794 @@
+{
+    "id":  "FVacIy9vSPnz7WwR",
+    "name":  "WF-02 · Vapi Tools (huecos, cita, datos, humano) Call Agent",
+    "active":  true,
+    "nodes":  [
+                  {
+                      "id":  "wh-02",
+                      "name":  "Vapi Tools",
+                      "webhookId":  "vapi-tools",
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -656,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "vapi-tools",
+                                         "authentication":  "headerAuth",
+                                         "responseMode":  "responseNode",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "credentials":  {
+                                          "httpHeaderAuth":  {
+                                                                 "id":  "agpJLcViVeqBRRnC",
+                                                                 "name":  "Header Auth account"
+                                                             }
+                                      }
+                  },
+                  {
+                      "id":  "cfg-02",
+                      "name":  "Config",
+                      "type":  "n8n-nodes-base.set",
+                      "typeVersion":  3.4,
+                      "position":  [
+                                       -448,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "assignments":  {
+                                                             "assignments":  [
+                                                                                 {
+                                                                                     "id":  "c1",
+                                                                                     "name":  "gas_url",
+                                                                                     "value":  "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c2",
+                                                                                     "name":  "gas_secret",
+                                                                                     "value":  "YOUR_SHARED_SECRET",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c3",
+                                                                                     "name":  "comercial_email",
+                                                                                     "value":  "YOUR_COMMERCIAL_EMAIL",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c4",
+                                                                                     "name":  "telefono_transferencia",
+                                                                                     "value":  "+34600000000",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c5",
+                                                                                     "name":  "telegram_chat_id",
+                                                                                     "value":  "YOUR_TELEGRAM_CHAT_ID",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c6",
+                                                                                     "name":  "duracion_cita",
+                                                                                     "value":  30,
+                                                                                     "type":  "number"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c7",
+                                                                                     "name":  "buffer_min",
+                                                                                     "value":  15,
+                                                                                     "type":  "number"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c8",
+                                                                                     "name":  "timezone",
+                                                                                     "value":  "Europe/Madrid",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c9",
+                                                                                     "name":  "calendar_id",
+                                                                                     "value":  "YOUR_CALENDAR_ID",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c10",
+                                                                                     "name":  "evolution_url",
+                                                                                     "value":  "http://evolution-api:8080",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c11",
+                                                                                     "name":  "evolution_key",
+                                                                                     "value":  "YOUR_EVOLUTION_API_KEY",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c12",
+                                                                                     "name":  "evolution_instance",
+                                                                                     "value":  "prueba01",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c13",
+                                                                                     "name":  "meet_link_fijo",
+                                                                                     "value":  "https://meet.google.com/YOUR_MEET_LINK",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c20",
+                                                                                     "name":  "horario_manana",
+                                                                                     "value":  "09:00-11:00",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c21",
+                                                                                     "name":  "horario_tarde",
+                                                                                     "value":  "14:00-17:00",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c22",
+                                                                                     "name":  "dias_reunion",
+                                                                                     "value":  "lunes-sabado",
+                                                                                     "type":  "string"
+                                                                                 }
+                                                                             ]
+                                                         },
+                                         "includeOtherFields":  true,
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "norm-02",
+                      "name":  "Normalizar tool calls",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -224,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "jsCode":  "const src = $(\u0027Vapi Tools\u0027).first().json;\nconst root = src.body ?? src;\nconst m = root.message ?? root;\nlet calls = [];\nif (Array.isArray(m.toolCallList)) calls = m.toolCallList;\nelse if (Array.isArray(m.toolCalls)) calls = m.toolCalls.map(t =\u003e ({ toolCallId: t.id, function: t.function }));\nelse if (m.functionCall) calls = [{ toolCallId: m.toolCallId ?? m.call?.id, function: m.functionCall }];\n\nconst call_id = String(m.call?.id ?? m.callId ?? \u0027\u0027);\nconst telefono = String(m.call?.customer?.number ?? m.customer?.number ?? m.call?.metadata?.telefono ?? \u0027\u0027);\nconst digitos = (s) =\u003e String(s || \u0027\u0027).replace(/\\D/g, \u0027\u0027);\nconst tel = digitos(telefono);\n\n// La voz outbound trae lead_id en metadata. En una llamada entrante o web no existe:\n// se resuelve por telefono y, si tampoco hay telefono, con un id estable por llamada.\nconst lead_id = String(m.call?.metadata?.lead_id ?? m.metadata?.lead_id ?? \u0027\u0027)\n  || (tel ? \u0027TEL-\u0027 + tel : \u0027WEB-\u0027 + (call_id || String(Date.now())).slice(0, 8));\nconst estado_actual = String(m.call?.metadata?.estado ?? m.metadata?.estado ?? \u0027\u0027);\nconst canal = String(m.call?.type ?? m.type ?? \u0027\u0027) === \u0027webCall\u0027 ? \u0027voz_web\u0027 : \u0027voz\u0027;\n\nfunction normalizarInicio(value) {\n  const texto = String(value || \u0027\u0027).trim();\n  if (!texto) return \u0027\u0027;\n  const conOffset = /(?:Z|[+-]\\d{2}:?\\d{2})$/.test(texto);\n  const dt = conOffset\n    ? DateTime.fromISO(texto, { setZone: true })\n    : DateTime.fromISO(texto, { zone: \u0027Europe/Madrid\u0027 });\n  if (!dt.isValid) return texto;\n  return dt.setZone(\u0027Europe/Madrid\u0027).toISO();\n}\n\nreturn calls.map(c =\u003e {\n  let args = c.function?.arguments ?? {};\n  if (typeof args === \u0027string\u0027) { try { args = JSON.parse(args); } catch (e) { args = {}; } }\n  if (args \u0026\u0026 typeof args === \u0027object\u0027 \u0026\u0026 args.inicio) args.inicio = normalizarInicio(args.inicio);\n  return { json: { toolCallId: c.toolCallId ?? c.id, name: c.function?.name, args, lead_id, canal, call_id, telefono, estado_actual } };\n});"
+                                     }
+                  },
+                  {
+                      "id":  "sw-02",
+                      "name":  "Switch herramienta",
+                      "type":  "n8n-nodes-base.switch",
+                      "typeVersion":  3,
+                      "position":  [
+                                       0,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "rules":  {
+                                                       "values":  [
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  2
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "r1",
+                                                                                                                    "leftValue":  "={{ $json.name }}",
+                                                                                                                    "rightValue":  "consultar_disponibilidad",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         },
+                                                                          "renameOutput":  true,
+                                                                          "outputKey":  "disponibilidad"
+                                                                      },
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  2
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "r2",
+                                                                                                                    "leftValue":  "={{ $json.name }}",
+                                                                                                                    "rightValue":  "crear_cita",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         },
+                                                                          "renameOutput":  true,
+                                                                          "outputKey":  "cita"
+                                                                      },
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  2
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "r3",
+                                                                                                                    "leftValue":  "={{ $json.name }}",
+                                                                                                                    "rightValue":  "guardar_datos",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         },
+                                                                          "renameOutput":  true,
+                                                                          "outputKey":  "datos"
+                                                                      },
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  2
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "r4",
+                                                                                                                    "leftValue":  "={{ $json.name }}",
+                                                                                                                    "rightValue":  "escalar_humano",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         },
+                                                                          "renameOutput":  true,
+                                                                          "outputKey":  "humano"
+                                                                      }
+                                                                  ]
+                                                   },
+                                         "options":  {
+                                                         "fallbackOutput":  "none"
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "busy-02",
+                      "name":  "Calendar freeBusy",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       240,
+                                       -304
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.gas_url }}",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ action: \u0027calendar.freebusy\u0027, secret: $(\u0027Config\u0027).first().json.gas_secret, calendarId: $(\u0027Config\u0027).first().json.calendar_id, timeMin: $now.toISO(), timeMax: $now.plus({ days: 14 }).toISO() }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "slots-02",
+                      "name":  "Calcular huecos",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       464,
+                                       -304
+                                   ],
+                      "parameters":  {
+                                         "jsCode":  "const cfg = $(\u0027Config\u0027).first().json;\nconst tool = $(\u0027Normalizar tool calls\u0027).item.json;\nconst args = tool.args || {};\nconst busyRaw = $json.data || [];\nconst busy = busyRaw.map(b =\u003e [new Date(b.start).getTime(), new Date(b.end).getTime()]);\n\nconst tz = cfg.timezone || \u0027Europe/Madrid\u0027;\nconst dur = Number(cfg.duracion_cita || 30);\nconst buffer = Number(cfg.buffer_min || 15);\nconst now = DateTime.now().setZone(tz);\nconst minStart = now.plus({ hours: 3 });\n\n// Rango pedido por la herramienta (si no llega, proximos 14 dias)\nlet desde = args.desde ? DateTime.fromISO(String(args.desde), { setZone: true }).setZone(tz) : now;\nlet hasta = args.hasta ? DateTime.fromISO(String(args.hasta), { setZone: true }).setZone(tz) : now.plus({ days: 14 });\nif (!desde.isValid) desde = now;\nif (!hasta.isValid) hasta = now.plus({ days: 14 });\nif (hasta \u003c desde) hasta = desde;\n\nconst iniDia = desde.startOf(\u0027day\u0027);\nconst finDia = hasta.startOf(\u0027day\u0027);\n\n// Horario del especialista (hora de Madrid). La reunion de 30 min cabe en la franja.\nconst MANANA = [9, 9.5, 10, 10.5];              // 09:00 - 11:00\nconst TARDE  = [14, 14.5, 15, 15.5, 16, 16.5];  // 14:00 - 17:00\nconst HORAS = MANANA.concat(TARDE);\nconst MAX_DIAS = 3; // tope para no devolver una lista gigante\n\nconst out = [];\nlet dias = 0;\n\nfor (let d = 0; d \u003c= 30 \u0026\u0026 dias \u003c MAX_DIAS; d++) {\n  const day = iniDia.plus({ days: d });\n  if (day \u003e finDia) break;\n  if (day.weekday \u003e 6) continue; // lunes a sabado (7 = domingo)\n\n  let delDia = 0;\n  for (const h of HORAS) {\n    const s = day.plus({ minutes: Math.round(h * 60) });\n    const e = s.plus({ minutes: dur });\n    if (s \u003c minStart || s \u003c desde) continue;\n    const sMs = s.toMillis(), eMs = e.toMillis();\n    const clash = busy.some(([bs, be]) =\u003e sMs \u003c be + buffer * 60000 \u0026\u0026 eMs \u003e bs - buffer * 60000);\n    if (clash) continue;\n    out.push(s);\n    delDia++;\n  }\n  if (delDia \u003e 0) dias++;\n}\n\nconst label = dt =\u003e dt.setLocale(\u0027es\u0027).toFormat(\"cccc d \u0027de\u0027 LLLL \u0027a las\u0027 HH:mm\") + \u0027 [\u0027 + dt.toISO() + \u0027]\u0027;\nconst result = out.length\n  ? \u0027Huecos libres (hora de Madrid): \u0027 + out.map(label).join(\u0027; \u0027) + \u0027. Al crear la cita copia el valor entre corchetes tal cual, sin recalcular la hora.\u0027\n  : \u0027No hay huecos libres en ese rango de fechas. Ofrece otro dia y vuelve a consultar.\u0027;\n\nreturn [{ json: { results: [{ toolCallId: tool.toolCallId, result }], slots: out.map(d =\u003e d.toISO()) } }];"
+                                     }
+                  },
+                  {
+                      "id":  "resp-slots-02",
+                      "name":  "Responder huecos",
+                      "type":  "n8n-nodes-base.respondToWebhook",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       688,
+                                       -304
+                                   ],
+                      "parameters":  {
+                                         "respondWith":  "json",
+                                         "responseBody":  "={{ JSON.stringify({ results: $json.results }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "cal-02",
+                      "name":  "Crear evento",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       240,
+                                       128
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.gas_url }}",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ action: \u0027agenda.agendar\u0027, secret: $(\u0027Config\u0027).first().json.gas_secret, calendarId: $(\u0027Config\u0027).first().json.calendar_id, inicio: $(\u0027Normalizar tool calls\u0027).item.json.args.inicio, nombre: $(\u0027Normalizar tool calls\u0027).item.json.args.nombre || \u0027\u0027, empresa: $(\u0027Normalizar tool calls\u0027).item.json.args.empresa || \u0027\u0027, problema: [$(\u0027Normalizar tool calls\u0027).item.json.args.motivo || \u0027\u0027, $(\u0027Normalizar tool calls\u0027).item.json.args.rubro ? \u0027Rubro: \u0027 + $(\u0027Normalizar tool calls\u0027).item.json.args.rubro : \u0027\u0027, $(\u0027Normalizar tool calls\u0027).item.json.args.procesos ? \u0027Procesos: \u0027 + $(\u0027Normalizar tool calls\u0027).item.json.args.procesos : \u0027\u0027].filter(Boolean).join(\u0027 | \u0027), telefono: $(\u0027Normalizar tool calls\u0027).item.json.telefono || \u0027\u0027, canal: $(\u0027Normalizar tool calls\u0027).item.json.canal, lead_id: $(\u0027Normalizar tool calls\u0027).item.json.lead_id, cita_id: \u0027CIT-\u0027 + ($(\u0027Normalizar tool calls\u0027).item.json.call_id || $now.toMillis()), creada_por: ($(\u0027Normalizar tool calls\u0027).item.json.canal === \u0027voz_web\u0027 ? \u0027agente_voz_web\u0027 : \u0027agente_voz\u0027) }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "prep-cita-02",
+                      "name":  "Preparar cita",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       464,
+                                       128
+                                   ],
+                      "parameters":  {
+                                         "jsCode":  "const tool = $(\u0027Normalizar tool calls\u0027).item.json;\nconst cfg = $(\u0027Config\u0027).first().json;\nconst args = tool.args || {};\nconst res = $json || {};\nconst data = res.data || {};\nconst dur = Number(cfg.duracion_cita || 30);\n\nconst inicioDt = DateTime.fromISO(String(args.inicio || \u0027\u0027), { setZone: true }).setZone(\u0027Europe/Madrid\u0027);\nconst fechaTxt = inicioDt.isValid\n  ? inicioDt.setLocale(\u0027es\u0027).toFormat(\"cccc d \u0027de\u0027 LLLL \u0027a las\u0027 HH:mm\")\n  : String(args.inicio || \u0027\u0027);\n\nfunction textoError(motivo, alts) {\n  const lista = (alts || []).map(a =\u003e a \u0026\u0026 a.texto).filter(Boolean).slice(0, 3);\n  let m = \u0027No he podido reservar ese horario.\u0027;\n  if (motivo === \u0027ocupado\u0027) m = \u0027Ese hueco se acaba de ocupar.\u0027;\n  else if (motivo === \u0027fuera_de_horario\u0027) m = \u0027Ese horario está fuera de la disponibilidad del especialista.\u0027;\n  else if (motivo === \u0027demasiado_pronto\u0027) m = \u0027Ese horario es demasiado pronto.\u0027;\n  if (lista.length) m += \u0027 Alternativas: \u0027 + lista.join(\u0027; \u0027) + \u0027.\u0027;\n  else m += \u0027 Ofrece otro dia y vuelve a consultar la disponibilidad.\u0027;\n  return m;\n}\n\n// El Apps Script valida franja horaria, anticipo minimo y que el hueco siga libre.\nif (res.ok === false || !data.ok) {\n  return [{ json: {\n    _ok: false,\n    _respuesta: textoError(data.motivo, data.alternativas),\n    _toolCallId: tool.toolCallId,\n    _whatsapp_texto: \u0027\u0027\n  } }];\n}\n\nconst meet = data.meet_link || cfg.meet_link_fijo || \u0027\u0027;\nconst nombre = args.nombre || \u0027\u0027;\nconst citaTxt = data.texto || fechaTxt;\n\nconst resp = \u0027Cita confirmada: \u0027 + citaTxt + \u0027.\u0027;\n\nconst texto = \u0027Hola\u0027 + (nombre ? \u0027 \u0027 + nombre : \u0027\u0027) + \u0027, soy Julian, de Rose Holding IA.\u0027\n  + \u0027\\n\\nTu reunion de diagnostico queda confirmada:\u0027\n  + \u0027\\n- \u0027 + citaTxt + \u0027 (hora de Madrid)\u0027\n  + \u0027\\n- Duracion: \u0027 + dur + \u0027 minutos\u0027\n  + (meet ? \u0027\\n- Videollamada: \u0027 + meet : \u0027\u0027)\n  + \u0027\\n\\nSi necesitas cambiarla, responde a este mensaje.\u0027;\n\nreturn [{ json: {\n  _ok: true,\n  _respuesta: resp,\n  _toolCallId: tool.toolCallId,\n  _whatsapp_texto: texto,\n  cita_id: data.cita_id || \u0027\u0027,\n  nombre: nombre,\n  empresa: args.empresa || \u0027\u0027,\n  rubro: args.rubro || \u0027\u0027,\n  procesos: args.procesos || \u0027\u0027,\n  canal: tool.canal,\n  telefono: tool.telefono || \u0027\u0027,\n  lead_id: tool.lead_id,\n  fecha: inicioDt.toFormat(\u0027dd/MM/yyyy\u0027),\n  hora: inicioDt.toFormat(\u0027HH:mm\u0027),\n  inicio: inicioDt.toISO(),\n  fin: inicioDt.plus({ minutes: dur }).toISO(),\n  estado: \u0027confirmada\u0027,\n  event_id: data.event_id || \u0027\u0027,\n  meet_link: meet,\n  creada_por: (tool.canal === \u0027voz_web\u0027 ? \u0027agente_voz_web\u0027 : \u0027agente_voz\u0027),\n  calendar_used: cfg.calendar_id || \u0027\u0027\n} }];"
+                                     }
+                  },
+                  {
+                      "id":  "resp-cita-02",
+                      "name":  "Responder cita",
+                      "type":  "n8n-nodes-base.respondToWebhook",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       912,
+                                       128
+                                   ],
+                      "parameters":  {
+                                         "respondWith":  "json",
+                                         "responseBody":  "={{ JSON.stringify({ results: [{ toolCallId: $(\u0027Preparar cita\u0027).item.json._toolCallId, result: $(\u0027Preparar cita\u0027).item.json._respuesta }] }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "prep-datos-02",
+                      "name":  "Preparar datos",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       240,
+                                       432
+                                   ],
+                      "parameters":  {
+                                         "jsCode":  "const tool = $(\u0027Normalizar tool calls\u0027).item.json;\nconst a = tool.args || {};\nconst TERMINALES = [\u0027cita_agendada\u0027, \u0027no_interesado\u0027, \u0027humano\u0027];\nconst row = { id: tool.lead_id };\nif (!TERMINALES.includes(String(tool.estado_actual || \u0027\u0027).toLowerCase())) row.estado = \u0027contactado\u0027;\nfor (const k of [\u0027nombre\u0027, \u0027empresa\u0027, \u0027sector\u0027, \u0027tamano\u0027, \u0027problema\u0027, \u0027procesos_manuales\u0027, \u0027quiere_automatizar\u0027, \u0027urgencia\u0027, \u0027email\u0027]) {\n  if (a[k] !== undefined \u0026\u0026 a[k] !== null \u0026\u0026 a[k] !== \u0027\u0027) row[k] = a[k];\n}\nif (a.decisor !== undefined) row.decisor = a.decisor ? \u0027si\u0027 : \u0027no\u0027;\nrow._respuesta = \u0027Datos guardados.\u0027;\nrow._toolCallId = tool.toolCallId;\nreturn [{ json: row }];"
+                                     }
+                  },
+                  {
+                      "id":  "save-02",
+                      "name":  "Guardar datos lead",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       464,
+                                       432
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.gas_url }}",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ action: \u0027sheets.appendOrUpdate\u0027, secret: $(\u0027Config\u0027).first().json.gas_secret, sheet: \u0027Leads\u0027, row: $json, matchingColumns: [\u0027id\u0027] }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "resp-datos-02",
+                      "name":  "Responder datos",
+                      "type":  "n8n-nodes-base.respondToWebhook",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       688,
+                                       432
+                                   ],
+                      "parameters":  {
+                                         "respondWith":  "json",
+                                         "responseBody":  "={{ JSON.stringify({ results: [{ toolCallId: $(\u0027Preparar datos\u0027).item.json._toolCallId, result: $(\u0027Preparar datos\u0027).item.json._respuesta }] }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "esc-02",
+                      "name":  "Avisar comercial",
+                      "webhookId":  "794eb9c6-acfb-452d-83b0-3f381504868b",
+                      "type":  "n8n-nodes-base.telegram",
+                      "typeVersion":  1.2,
+                      "onError":  "continueRegularOutput",
+                      "position":  [
+                                       240,
+                                       720
+                                   ],
+                      "parameters":  {
+                                         "chatId":  "={{ $(\u0027Config\u0027).first().json.telegram_chat_id }}",
+                                         "text":  "={{ \u0027LLAMADA EN CURSO · el prospecto pide hablar con una persona.\\nMotivo: \u0027 + ($(\u0027Normalizar tool calls\u0027).item.json.args.motivo || \u0027no indicado\u0027) + \u0027\\nLead: \u0027 + $(\u0027Normalizar tool calls\u0027).item.json.lead_id + \u0027\\nTelefono: \u0027 + $(\u0027Normalizar tool calls\u0027).item.json.telefono }}",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "credentials":  {
+                                          "telegramApi":  {
+                                                              "id":  "f4OWjpVUu0awzSQ9",
+                                                              "name":  "Telegram Julian Bot"
+                                                          }
+                                      }
+                  },
+                  {
+                      "id":  "resp-esc-02",
+                      "name":  "Responder escalado",
+                      "type":  "n8n-nodes-base.respondToWebhook",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       464,
+                                       720
+                                   ],
+                      "parameters":  {
+                                         "respondWith":  "json",
+                                         "responseBody":  "={{ JSON.stringify({ results: [{ toolCallId: $(\u0027Normalizar tool calls\u0027).item.json.toolCallId, result: \u0027Le paso ahora mismo con un companero del equipo.\u0027 }] }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "err-02",
+                      "name":  "Error Trigger",
+                      "type":  "n8n-nodes-base.errorTrigger",
+                      "typeVersion":  1,
+                      "position":  [
+                                       240,
+                                       928
+                                   ],
+                      "parameters":  {
+
+                                     }
+                  },
+                  {
+                      "id":  "err-tg-02",
+                      "name":  "Avisar error",
+                      "webhookId":  "85708759-5f4d-41dd-b738-a11b391e34d8",
+                      "type":  "n8n-nodes-base.telegram",
+                      "typeVersion":  1.2,
+                      "onError":  "continueRegularOutput",
+                      "position":  [
+                                       464,
+                                       928
+                                   ],
+                      "parameters":  {
+                                         "chatId":  "YOUR_TELEGRAM_CHAT_ID",
+                                         "text":  "={{ \u0027ERROR en WF-02 (Vapi Tools)\\nNodo: \u0027 + $json.execution?.lastNodeExecuted + \u0027\\nError: \u0027 + ($json.execution?.error?.message || \u0027ver ejecucion\u0027) }}",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "credentials":  {
+                                          "telegramApi":  {
+                                                              "id":  "f4OWjpVUu0awzSQ9",
+                                                              "name":  "Telegram Julian Bot"
+                                                          }
+                                      }
+                  },
+                  {
+                      "id":  "whatsapp-enviar-01",
+                      "name":  "Enviar WhatsApp",
+                      "disabled":  true,
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "onError":  "continueRegularOutput",
+                      "position":  [
+                                       1120,
+                                       128
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.evolution_url }}/message/sendText/{{ $(\u0027Config\u0027).first().json.evolution_instance }}",
+                                         "sendHeaders":  true,
+                                         "headerParameters":  {
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "apikey",
+                                                                                         "value":  "={{ $(\u0027Config\u0027).first().json.evolution_key }}"
+                                                                                     }
+                                                                                 ]
+                                                              },
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ number: String($(\u0027Normalizar tool calls\u0027).item.json.telefono || \u0027\u0027).replace(/[^0-9]/g, \u0027\u0027), text: $(\u0027Preparar cita\u0027).item.json._whatsapp_texto }) }}",
+                                         "options":  {
+                                                         "timeout":  8000
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "if-cita-ok-01",
+                      "name":  "Cita creada?",
+                      "type":  "n8n-nodes-base.if",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       1120,
+                                       320
+                                   ],
+                      "parameters":  {
+                                         "options":  {
+
+                                                     },
+                                         "conditions":  {
+                                                            "options":  {
+                                                                            "version":  2,
+                                                                            "typeValidation":  "strict",
+                                                                            "leftValue":  "",
+                                                                            "caseSensitive":  true
+                                                                        },
+                                                            "conditions":  [
+                                                                               {
+                                                                                   "operator":  {
+                                                                                                    "operation":  "true",
+                                                                                                    "singleValue":  true,
+                                                                                                    "type":  "boolean"
+                                                                                                },
+                                                                                   "rightValue":  true,
+                                                                                   "id":  "if1",
+                                                                                   "leftValue":  "={{ $(\u0027Preparar cita\u0027).item.json._ok }}"
+                                                                               }
+                                                                           ],
+                                                            "combinator":  "and"
+                                                        }
+                                     }
+                  },
+                  {
+                      "id":  "tg-cita-01",
+                      "name":  "Avisar cita",
+                      "webhookId":  "1b3b750b-39db-48fb-9ed9-947e09e1335c",
+                      "type":  "n8n-nodes-base.telegram",
+                      "typeVersion":  1.2,
+                      "onError":  "continueRegularOutput",
+                      "position":  [
+                                       1344,
+                                       320
+                                   ],
+                      "parameters":  {
+                                         "chatId":  "={{ $(\u0027Config\u0027).first().json.telegram_chat_id }}",
+                                         "additionalFields":  {
+                                                                  "appendAttribution":  false
+                                                              },
+                                         "text":  "={{ \u0027CITA NUEVA\u0027 + ($(\u0027Preparar cita\u0027).item.json.canal === \u0027voz_web\u0027 ? \u0027 (web)\u0027 : \u0027 (telefono)\u0027) + \u0027\\n\u0027 +\n($(\u0027Preparar cita\u0027).item.json.nombre || \u0027sin nombre\u0027) + \u0027 - \u0027 + ($(\u0027Preparar cita\u0027).item.json.empresa || \u0027sin empresa\u0027) + \u0027\\n\u0027 +\n\u0027Rubro: \u0027 + ($(\u0027Preparar cita\u0027).item.json.rubro || \u0027no indicado\u0027) + \u0027\\n\u0027 +\n\u0027Procesos: \u0027 + ($(\u0027Preparar cita\u0027).item.json.procesos || \u0027no indicado\u0027) + \u0027\\n\u0027 +\n$(\u0027Preparar cita\u0027).item.json.fecha + \u0027 a las \u0027 + $(\u0027Preparar cita\u0027).item.json.hora + \u0027 (hora de Madrid, 30 min)\\n\u0027 +\n\u0027Tel: \u0027 + ($(\u0027Preparar cita\u0027).item.json.telefono || \u0027no disponible\u0027) + \u0027\\n\u0027 +\n\u0027Lead: \u0027 + $(\u0027Preparar cita\u0027).item.json.lead_id + \u0027\\n\u0027 +\n($(\u0027Preparar cita\u0027).item.json.meet_link ? \u0027Enlace: \u0027 + $(\u0027Preparar cita\u0027).item.json.meet_link + \u0027\\n\u0027 : \u0027\u0027) +\n\u0027\\nEnvíale el enlace por WhatsApp.\u0027 }}"
+                                     },
+                      "credentials":  {
+                                          "telegramApi":  {
+                                                              "id":  "f4OWjpVUu0awzSQ9",
+                                                              "name":  "Telegram Julian Bot"
+                                                          }
+                                      }
+                  }
+              ],
+    "connections":  {
+                        "Vapi Tools":  {
+                                           "main":  [
+                                                        [
+                                                            {
+                                                                "node":  "Config",
+                                                                "type":  "main",
+                                                                "index":  0
+                                                            }
+                                                        ]
+                                                    ]
+                                       },
+                        "Config":  {
+                                       "main":  [
+                                                    [
+                                                        {
+                                                            "node":  "Normalizar tool calls",
+                                                            "type":  "main",
+                                                            "index":  0
+                                                        }
+                                                    ]
+                                                ]
+                                   },
+                        "Switch herramienta":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Calendar freeBusy",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ],
+                                                                [
+                                                                    {
+                                                                        "node":  "Crear evento",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ],
+                                                                [
+                                                                    {
+                                                                        "node":  "Preparar datos",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ],
+                                                                [
+                                                                    {
+                                                                        "node":  "Avisar comercial",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "Calendar freeBusy":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "Calcular huecos",
+                                                                       "type":  "main",
+                                                                       "index":  0
+                                                                   }
+                                                               ]
+                                                           ]
+                                              },
+                        "Calcular huecos":  {
+                                                "main":  [
+                                                             [
+                                                                 {
+                                                                     "node":  "Responder huecos",
+                                                                     "type":  "main",
+                                                                     "index":  0
+                                                                 }
+                                                             ]
+                                                         ]
+                                            },
+                        "Crear evento":  {
+                                             "main":  [
+                                                          [
+                                                              {
+                                                                  "node":  "Preparar cita",
+                                                                  "type":  "main",
+                                                                  "index":  0
+                                                              }
+                                                          ]
+                                                      ]
+                                         },
+                        "Preparar cita":  {
+                                              "main":  [
+                                                           [
+                                                               {
+                                                                   "node":  "Responder cita",
+                                                                   "type":  "main",
+                                                                   "index":  0
+                                                               }
+                                                           ]
+                                                       ]
+                                          },
+                        "Preparar datos":  {
+                                               "main":  [
+                                                            [
+                                                                {
+                                                                    "node":  "Guardar datos lead",
+                                                                    "type":  "main",
+                                                                    "index":  0
+                                                                }
+                                                            ]
+                                                        ]
+                                           },
+                        "Guardar datos lead":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Responder datos",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "Avisar comercial":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Responder escalado",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Error Trigger":  {
+                                              "main":  [
+                                                           [
+                                                               {
+                                                                   "node":  "Avisar error",
+                                                                   "type":  "main",
+                                                                   "index":  0
+                                                               }
+                                                           ]
+                                                       ]
+                                          },
+                        "Normalizar tool calls":  {
+                                                      "main":  [
+                                                                   [
+                                                                       {
+                                                                           "node":  "Switch herramienta",
+                                                                           "type":  "main",
+                                                                           "index":  0
+                                                                       }
+                                                                   ]
+                                                               ]
+                                                  },
+                        "Responder cita":  {
+                                               "main":  [
+                                                            [
+                                                                {
+                                                                    "node":  "Enviar WhatsApp",
+                                                                    "type":  "main",
+                                                                    "index":  0
+                                                                },
+                                                                {
+                                                                    "node":  "Cita creada?",
+                                                                    "type":  "main",
+                                                                    "index":  0
+                                                                }
+                                                            ]
+                                                        ]
+                                           },
+                        "Avisar cita":  {
+                                            "main":  [
+
+                                                     ]
+                                        },
+                        "Cita creada?":  {
+                                             "main":  [
+                                                          [
+                                                              {
+                                                                  "node":  "Avisar cita",
+                                                                  "type":  "main",
+                                                                  "index":  0
+                                                              }
+                                                          ],
+                                                          [
+
+                                                          ]
+                                                      ]
+                                         }
+                    },
+    "settings":  {
+                     "timezone":  "Europe/Madrid",
+                     "executionOrder":  "v1",
+                     "binaryMode":  "separate"
+                 }
+}

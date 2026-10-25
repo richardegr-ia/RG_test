@@ -1,0 +1,445 @@
+{
+    "id":  "8miJaY64Yqs2mWqA",
+    "name":  "WF-11 · Post-llamada (Sheets + avisos) Call Agent",
+    "active":  true,
+    "nodes":  [
+                  {
+                      "id":  "wh-11",
+                      "name":  "Vapi Eventos",
+                      "webhookId":  "vapi-events",
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -656,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "vapi-events",
+                                         "authentication":  "headerAuth",
+                                         "responseMode":  "responseNode",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "credentials":  {
+                                          "httpHeaderAuth":  {
+                                                                 "id":  "agpJLcViVeqBRRnC",
+                                                                 "name":  "Header Auth account"
+                                                             }
+                                      }
+                  },
+                  {
+                      "id":  "resp-11",
+                      "name":  "Responder 200",
+                      "type":  "n8n-nodes-base.respondToWebhook",
+                      "typeVersion":  1.1,
+                      "position":  [
+                                       -448,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "respondWith":  "text",
+                                         "responseBody":  "ok",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "cfg-11",
+                      "name":  "Config",
+                      "type":  "n8n-nodes-base.set",
+                      "typeVersion":  3.4,
+                      "position":  [
+                                       -224,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "assignments":  {
+                                                             "assignments":  [
+                                                                                 {
+                                                                                     "id":  "c1",
+                                                                                     "name":  "gas_url",
+                                                                                     "value":  "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c2",
+                                                                                     "name":  "gas_secret",
+                                                                                     "value":  "YOUR_SHARED_SECRET",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c3",
+                                                                                     "name":  "telegram_chat_id",
+                                                                                     "value":  "YOUR_TELEGRAM_CHAT_ID",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c4",
+                                                                                     "name":  "evolution_base_url",
+                                                                                     "value":  "https://wa.tudominio.com",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c5",
+                                                                                     "name":  "evolution_instance",
+                                                                                     "value":  "agencia",
+                                                                                     "type":  "string"
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "c6",
+                                                                                     "name":  "max_intentos",
+                                                                                     "value":  3,
+                                                                                     "type":  "number"
+                                                                                 }
+                                                                             ]
+                                                         },
+                                         "includeOtherFields":  true,
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "sw-11",
+                      "name":  "Tipo evento",
+                      "type":  "n8n-nodes-base.switch",
+                      "typeVersion":  3,
+                      "position":  [
+                                       0,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "rules":  {
+                                                       "values":  [
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  2
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "r1",
+                                                                                                                    "leftValue":  "={{ $(\u0027Vapi Eventos\u0027).first().json.body?.message?.type ?? $json.body?.message?.type ?? $json.message?.type ?? $json.type }}",
+                                                                                                                    "rightValue":  "end-of-call-report",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         },
+                                                                          "renameOutput":  true,
+                                                                          "outputKey":  "fin_llamada"
+                                                                      },
+                                                                      {
+                                                                          "conditions":  {
+                                                                                             "options":  {
+                                                                                                             "caseSensitive":  true,
+                                                                                                             "leftValue":  "",
+                                                                                                             "typeValidation":  "strict",
+                                                                                                             "version":  2
+                                                                                                         },
+                                                                                             "conditions":  [
+                                                                                                                {
+                                                                                                                    "id":  "r2",
+                                                                                                                    "leftValue":  "={{ $(\u0027Vapi Eventos\u0027).first().json.body?.message?.type ?? $json.body?.message?.type ?? $json.message?.type ?? $json.type }}",
+                                                                                                                    "rightValue":  "status-update",
+                                                                                                                    "operator":  {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "operation":  "equals"
+                                                                                                                                 }
+                                                                                                                }
+                                                                                                            ],
+                                                                                             "combinator":  "and"
+                                                                                         },
+                                                                          "renameOutput":  true,
+                                                                          "outputKey":  "estado"
+                                                                      }
+                                                                  ]
+                                                   },
+                                         "options":  {
+                                                         "fallbackOutput":  "none"
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "extract-11",
+                      "name":  "Extraer report",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       240,
+                                       -160
+                                   ],
+                      "parameters":  {
+                                         "jsCode":  "const src = $(\u0027Vapi Eventos\u0027).first().json;\nconst m = src.body?.message ?? src.body ?? src.message ?? src;\nconst call = m.call ?? {};\nconst art = m.artifact ?? {};\nconst an = m.analysis ?? {};\nconst sd = an.structuredData ?? {};\nconst md = call.metadata ?? {};\n\nconst digitos = (s) =\u003e String(s || \u0027\u0027).replace(/\\D/g, \u0027\u0027);\nconst call_id = String(call.id ?? m.callId ?? \u0027\u0027);\nconst telefono = String(call.customer?.number ?? md.telefono ?? \u0027\u0027);\nconst tel = digitos(telefono);\n\n// Igual que en vapi-tools: una llamada entrante o web no trae metadata.lead_id.\nconst lead_id = String(md.lead_id ?? \u0027\u0027)\n  || (tel ? \u0027TEL-\u0027 + tel : \u0027WEB-\u0027 + (call_id || String(Date.now())).slice(0, 8));\nconst canal = String(call.type ?? \u0027\u0027) === \u0027webCall\u0027 ? \u0027voz_web\u0027 : \u0027voz\u0027;\n\nconst started = call.startedAt ?? m.startedAt ?? \u0027\u0027;\nconst ended = call.endedAt ?? m.endedAt ?? \u0027\u0027;\nconst dur = m.durationSeconds ?? (started \u0026\u0026 ended ? Math.round((new Date(ended) - new Date(started)) / 1000) : 0);\n\nreturn [{ json: {\n  call_id: String(call.id ?? m.callId ?? \u0027\u0027),\n  lead_id: lead_id,\n  canal: canal,\n  campana: String(md.campana ?? \u0027\u0027),\n  telefono: telefono,\n  intentos: Number(md.intentos ?? 0),\n  ended_reason: String(m.endedReason ?? call.endedReason ?? \u0027\u0027),\n  duracion_seg: dur,\n  inicio: started,\n  fin: ended,\n  resumen: an.summary ?? \u0027\u0027,\n  transcript: art.transcript ?? m.transcript ?? \u0027\u0027,\n  grabacion_url: art.recordingUrl ?? m.recordingUrl ?? \u0027\u0027,\n  nombre: sd.nombre ?? md.nombre ?? \u0027\u0027,\n  empresa: sd.empresa ?? md.empresa ?? \u0027\u0027,\n  sector: sd.rubro || sd.sector || \u0027\u0027,\n  tamano: sd.tamano ?? \u0027\u0027,\n  problema: sd.problema ?? \u0027\u0027,\n  procesos_manuales: sd.procesos_manuales ?? \u0027\u0027,\n  quiere_automatizar: sd.quiere_automatizar ?? \u0027\u0027,\n  urgencia: sd.urgencia ?? \u0027\u0027,\n  decisor: sd.decisor,\n  interes: sd.interes ?? \u0027\u0027,\n  score: sd.score,\n  objecion: sd.objecion ?? \u0027\u0027,\n  resultado: sd.resultado ?? \u0027\u0027,\n  fecha_cita: sd.fecha_cita ?? \u0027\u0027,\n  email: sd.email ?? \u0027\u0027,\n  proximo_paso: sd.proximo_paso ?? \u0027\u0027\n} }];"
+                                     }
+                  },
+                  {
+                      "id":  "classify-11",
+                      "name":  "Clasificar y programar",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       464,
+                                       -160
+                                   ],
+                      "parameters":  {
+                                         "jsCode":  "const cfg = $(\u0027Config\u0027).first().json;\nconst j = $json;\nconst intentos = Number(j.intentos || 0);\nconst ended = String(j.ended_reason || \u0027\u0027);\n\nlet resultado = String(j.resultado || \u0027\u0027).toLowerCase();\nif (!resultado) {\n  resultado = [\u0027customer-did-not-answer\u0027, \u0027customer-busy\u0027, \u0027voicemail\u0027, \u0027silence-timeout\u0027].includes(ended)\n    ? \u0027sin_contacto\u0027\n    : \u0027contactado\u0027;\n}\n\nconst plus = h =\u003e new Date(Date.now() + h * 3600e3).toISOString();\nlet estado = \u0027contactado\u0027;\nlet next = \u0027\u0027;\n\nswitch (resultado) {\n  case \u0027cita\u0027: estado = \u0027cita_agendada\u0027; break;\n  case \u0027humano\u0027: estado = \u0027humano\u0027; break;\n  case \u0027no_interesado\u0027: estado = \u0027no_interesado\u0027; break;\n  case \u0027callback\u0027: estado = \u0027reintentar\u0027; next = plus(24); break;\n  case \u0027info\u0027: estado = \u0027contactado\u0027; next = plus(48); break;\n  case \u0027sin_contacto\u0027:\n    if (ended === \u0027voicemail\u0027) { estado = \u0027reintentar\u0027; next = plus(24); }\n    else if (intentos \u003e= Number(cfg.max_intentos || 3)) { estado = \u0027nurture\u0027; next = plus(24 * 90); }\n    else { estado = \u0027reintentar\u0027; next = plus(ended === \u0027customer-busy\u0027 ? 0.5 : 2); }\n    break;\n  default: estado = \u0027contactado\u0027; break;\n}\n\nlet score = Number(j.score || 0);\nif (!score) {\n  score += j.interes === \u0027alto\u0027 ? 40 : j.interes === \u0027medio\u0027 ? 25 : 10;\n  score += j.urgencia === \u0027alta\u0027 ? 20 : j.urgencia === \u0027media\u0027 ? 10 : 0;\n  score += j.decisor === true ? 15 : 0;\n  score += j.problema ? 10 : 0;\n  score += j.empresa ? 10 : 0;\n  score = Math.max(0, Math.min(100, score));\n}\n\nconst row = {\n  id: j.lead_id,\n  lead_id: j.lead_id,\n  estado,\n  resultado,\n  score,\n  call_id: j.call_id,\n  ended_reason: ended,\n  duracion_seg: j.duracion_seg,\n  conversacion_id: j.call_id,\n  canal: j.canal || \u0027voz\u0027,\n  inicio: j.inicio,\n  fin: j.fin,\n  resumen: j.resumen,\n  transcripcion_ref: j.grabacion_url\n};\n\nfor (const k of [\u0027nombre\u0027, \u0027empresa\u0027, \u0027sector\u0027, \u0027tamano\u0027, \u0027telefono\u0027, \u0027email\u0027, \u0027problema\u0027, \u0027procesos_manuales\u0027, \u0027quiere_automatizar\u0027, \u0027urgencia\u0027, \u0027interes\u0027, \u0027objecion\u0027, \u0027proximo_paso\u0027, \u0027fecha_cita\u0027, \u0027grabacion_url\u0027]) {\n  if (j[k] !== undefined \u0026\u0026 j[k] !== null \u0026\u0026 j[k] !== \u0027\u0027) row[k] = j[k];\n}\nif (j.decisor === true) row.decisor = \u0027si\u0027;\nif (j.decisor === false) row.decisor = \u0027no\u0027;\nif (next) row.fecha_proximo_intento = next;\nif (resultado === \u0027cita\u0027) row.cita_id = \u0027CIT-\u0027 + j.call_id;\n\nreturn [{ json: { ...row, _tg_resultado: resultado, _tg_score: score } }];"
+                                     }
+                  },
+                  {
+                      "id":  "leads-11",
+                      "name":  "Actualizar lead",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       688,
+                                       -160
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.gas_url }}",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ action: \u0027sheets.appendOrUpdate\u0027, secret: $(\u0027Config\u0027).first().json.gas_secret, sheet: \u0027Leads\u0027, row: $json, matchingColumns: [\u0027id\u0027] }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "conv-11",
+                      "name":  "Guardar conversacion",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       912,
+                                       -160
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.gas_url }}",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ action: \u0027sheets.appendOrUpdate\u0027, secret: $(\u0027Config\u0027).first().json.gas_secret, sheet: \u0027Conversaciones\u0027, row: $(\u0027Clasificar y programar\u0027).item.json, matchingColumns: [\u0027conversacion_id\u0027] }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "tg-11",
+                      "name":  "Avisar resultado",
+                      "webhookId":  "cd66df47-0d3a-4548-a910-40193bbffa0a",
+                      "type":  "n8n-nodes-base.telegram",
+                      "typeVersion":  1.2,
+                      "onError":  "continueRegularOutput",
+                      "position":  [
+                                       1120,
+                                       -160
+                                   ],
+                      "parameters":  {
+                                         "chatId":  "={{ $(\u0027Config\u0027).first().json.telegram_chat_id }}",
+                                         "text":  "={{ \u0027LLAMADA FINALIZADA\\nResultado: \u0027 + $(\u0027Clasificar y programar\u0027).item.json._tg_resultado + \u0027 · Score \u0027 + $(\u0027Clasificar y programar\u0027).item.json._tg_score + \u0027\\n\u0027 + ($(\u0027Extraer report\u0027).item.json.nombre || \u0027Sin nombre\u0027) + \u0027 · \u0027 + ($(\u0027Extraer report\u0027).item.json.empresa || \u0027Sin empresa\u0027) + \u0027\\nMotivo: \u0027 + ($(\u0027Extraer report\u0027).item.json.problema || \u0027no detectado\u0027) + \u0027\\nObjecion: \u0027 + ($(\u0027Extraer report\u0027).item.json.objecion || \u0027ninguna\u0027) + \u0027\\nDuracion: \u0027 + $(\u0027Extraer report\u0027).item.json.duracion_seg + \u0027 s\\nCita: \u0027 + ($(\u0027Extraer report\u0027).item.json.fecha_cita || \u0027no agendada\u0027) }}",
+                                         "additionalFields":  {
+
+                                                              }
+                                     },
+                      "credentials":  {
+                                          "telegramApi":  {
+                                                              "id":  "f4OWjpVUu0awzSQ9",
+                                                              "name":  "Telegram Julian Bot"
+                                                          }
+                                      }
+                  },
+                  {
+                      "id":  "wa-11",
+                      "name":  "Confirmar WhatsApp",
+                      "disabled":  true,
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "onError":  "continueRegularOutput",
+                      "position":  [
+                                       1344,
+                                       -160
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.evolution_base_url + \u0027/message/sendText/\u0027 + $(\u0027Config\u0027).first().json.evolution_instance }}",
+                                         "authentication":  "genericCredentialType",
+                                         "genericAuthType":  "httpHeaderAuth",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ number: $(\u0027Extraer report\u0027).item.json.telefono, text: ($(\u0027Clasificar y programar\u0027).item.json._tg_resultado === \u0027cita\u0027 ? \u0027Hola \u0027 + ($(\u0027Extraer report\u0027).item.json.nombre || \u0027\u0027) + \u0027, soy el asistente de la agencia. Tu reunion queda confirmada\u0027 + ($(\u0027Extraer report\u0027).item.json.fecha_cita ? \u0027 para el \u0027 + $(\u0027Extraer report\u0027).item.json.fecha_cita : \u0027\u0027) + \u0027. Te llega la invitacion por email.\u0027 : \u0027Hola \u0027 + ($(\u0027Extraer report\u0027).item.json.nombre || \u0027\u0027) + \u0027, soy el asistente de la agencia. Gracias por hablar con nosotros; si quieres, te propongo un hueco para una reunion de 30 minutos.\u0027) }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "noop-11",
+                      "name":  "Sin accion",
+                      "type":  "n8n-nodes-base.noOp",
+                      "typeVersion":  1,
+                      "position":  [
+                                       912,
+                                       176
+                                   ],
+                      "parameters":  {
+
+                                     }
+                  },
+                  {
+                      "id":  "warmup-gas-01",
+                      "name":  "Despertar Apps Script",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       608,
+                                       176
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "={{ $(\u0027Config\u0027).first().json.gas_url }}",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ action: \u0027ping\u0027, secret: $(\u0027Config\u0027).first().json.gas_secret }) }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  }
+              ],
+    "connections":  {
+                        "Vapi Eventos":  {
+                                             "main":  [
+                                                          [
+                                                              {
+                                                                  "node":  "Responder 200",
+                                                                  "type":  "main",
+                                                                  "index":  0
+                                                              }
+                                                          ]
+                                                      ]
+                                         },
+                        "Responder 200":  {
+                                              "main":  [
+                                                           [
+                                                               {
+                                                                   "node":  "Config",
+                                                                   "type":  "main",
+                                                                   "index":  0
+                                                               }
+                                                           ]
+                                                       ]
+                                          },
+                        "Config":  {
+                                       "main":  [
+                                                    [
+                                                        {
+                                                            "node":  "Tipo evento",
+                                                            "type":  "main",
+                                                            "index":  0
+                                                        }
+                                                    ]
+                                                ]
+                                   },
+                        "Tipo evento":  {
+                                            "main":  [
+                                                         [
+                                                             {
+                                                                 "node":  "Extraer report",
+                                                                 "type":  "main",
+                                                                 "index":  0
+                                                             }
+                                                         ],
+                                                         [
+                                                             {
+                                                                 "node":  "Despertar Apps Script",
+                                                                 "type":  "main",
+                                                                 "index":  0
+                                                             }
+                                                         ]
+                                                     ]
+                                        },
+                        "Extraer report":  {
+                                               "main":  [
+                                                            [
+                                                                {
+                                                                    "node":  "Clasificar y programar",
+                                                                    "type":  "main",
+                                                                    "index":  0
+                                                                }
+                                                            ]
+                                                        ]
+                                           },
+                        "Clasificar y programar":  {
+                                                       "main":  [
+                                                                    [
+                                                                        {
+                                                                            "node":  "Actualizar lead",
+                                                                            "type":  "main",
+                                                                            "index":  0
+                                                                        }
+                                                                    ]
+                                                                ]
+                                                   },
+                        "Actualizar lead":  {
+                                                "main":  [
+                                                             [
+                                                                 {
+                                                                     "node":  "Guardar conversacion",
+                                                                     "type":  "main",
+                                                                     "index":  0
+                                                                 }
+                                                             ]
+                                                         ]
+                                            },
+                        "Guardar conversacion":  {
+                                                     "main":  [
+                                                                  [
+                                                                      {
+                                                                          "node":  "Avisar resultado",
+                                                                          "type":  "main",
+                                                                          "index":  0
+                                                                      }
+                                                                  ]
+                                                              ]
+                                                 },
+                        "Avisar resultado":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Confirmar WhatsApp",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Despertar Apps Script":  {
+                                                      "main":  [
+                                                                   [
+                                                                       {
+                                                                           "node":  "Sin accion",
+                                                                           "type":  "main",
+                                                                           "index":  0
+                                                                       }
+                                                                   ]
+                                                               ]
+                                                  }
+                    },
+    "settings":  {
+                     "timezone":  "Europe/Madrid",
+                     "executionOrder":  "v1",
+                     "binaryMode":  "separate"
+                 }
+}
